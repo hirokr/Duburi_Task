@@ -5,7 +5,7 @@ class Line:
     def __init__(self) -> None:
         frameWidth = 640
         frameHeight = 480
-        self.capture = cv.VideoCapture(0)
+        self.capture = cv.VideoCapture(r'Duburi_Task\resource\background.mp4')
         self.image = cv.imread(r'Duburi_Task\resource\black_L.jpg')
         self.capture.set(3, frameWidth)
         self.capture.set(4, frameHeight)
@@ -35,8 +35,8 @@ class Line:
                 if len(approx) <=20:
                     x, y, w, h = cv.boundingRect(approx)
                     # print(x,y)
-                    if self.is_black_color((x+5,y+5)):
-                        print("True")
+                    if self.is_black_color((x+10,y+10)):
+                        # print("True")
                         cv.rectangle(imgContour, (x, y), (x+w, y+h), (0,255,0), 5)
                         cv.putText(imgContour, f'Points: {len(approx)}', (x+w-20, y-20), cv.FONT_HERSHEY_COMPLEX, 0.7, (0,255,0), 2)                    
     
@@ -82,7 +82,7 @@ class Line:
 
             imgStack = imgContour
             cv.imshow('Blur', imgStack)
-            cv.imshow('Canny', imgCanny)
+            # cv.imshow('Canny', imgCanny)
 
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -109,5 +109,5 @@ class Line:
             
             cv.waitKey(0)       
             
-x = Line().getImage()
-# x = Line().getVideo()
+# x = Line().getImage()
+x = Line().getVideo()
