@@ -63,31 +63,37 @@ class Line:
         return is_black
 
     def getVideo(self):
+        size = (640, 480) 
+        result = cv.VideoWriter('output.avi', -1, 20.0, (640,480))
         while True:
             success, self.img = self.capture.read()
-            imgContour = self.img.copy()
+            if success == True:
+                imgContour = self.img.copy()
 
-            imgBlur = cv.GaussianBlur(self.img, (7,7), 1)
-            imgGray = cv.cvtColor(imgBlur, cv.COLOR_BGR2GRAY)
+                imgBlur = cv.GaussianBlur(self.img, (7,7), 1)
+                imgGray = cv.cvtColor(imgBlur, cv.COLOR_BGR2GRAY)
 
-            threshold1 = cv.getTrackbarPos('Threshold1', 'Parameters') # Threshold1 Adjust Bar
-            threshold2 = cv.getTrackbarPos('Threshold2', 'Parameters') # Threshold1 Adjust Bar
+                threshold1 = cv.getTrackbarPos('Threshold1', 'Parameters') # Threshold1 Adjust Bar
+                threshold2 = cv.getTrackbarPos('Threshold2', 'Parameters') # Threshold1 Adjust Bar
 
-            imgCanny = cv.Canny(imgGray, threshold1, threshold2) 
+                imgCanny = cv.Canny(imgGray, threshold1, threshold2) 
 
-            kernel = np.ones((5,5))
-            imgDil = cv.dilate(imgCanny, kernel, iterations=1)
+                kernel = np.ones((5,5))
+                imgDil = cv.dilate(imgCanny, kernel, iterations=1)
 
-            self.getContour(imgDil, imgContour)
+                self.getContour(imgDil, imgContour)
 
-            imgStack = imgContour
-            cv.imshow('Blur', imgStack)
-            # cv.imshow('Canny', imgCanny)
+                imgStack = imgContour
+                cv.imshow('Blur', imgStack)
+                # cv.imshow('Canny', imgCanny)
 
-            if cv.waitKey(1) & 0xFF == ord('q'):
+                if cv.waitKey(1) & 0xFF == ord('q'):
+                    break
+            else:
                 break
 
         self.capture.release()
+        result.release()
         cv.destroyAllWindows()
 
     def getImage(self):
