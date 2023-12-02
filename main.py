@@ -11,6 +11,7 @@ class Line:
         self.capture.set(4, frameHeight)
         self.slider() # For Adjusting the Threshold for canny edge detection
 
+
     def slider(self):
         def empty(a): pass 
         cv.namedWindow("Parameters")
