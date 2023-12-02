@@ -10,6 +10,8 @@ class Line:
         self.capture.set(3, frameWidth)
         self.capture.set(4, frameHeight)
         self.slider() # For Adjusting the Threshold for canny edge detection
+        self.Record_Video() # Method for recording
+
 
 
     def slider(self):
@@ -61,10 +63,19 @@ class Line:
         is_black = cv.inRange(hsv_color, lower_black, upper_black).all()
 
         return is_black
+    
+    def Record_Video(self):
+        width = int(self.capture.get(3))
+        height = int(self.capture.get(4))
+        fcc = cv.VideoWriter_fourcc(*'XVID')
+
+        path = 'Duburi_Task\Code_output.avi'
+        print(path+' recording')
+        self.writer = cv.VideoWriter(path, fcc, 30.0, (width, height))
+
 
     def getVideo(self):
-        size = (640, 480) 
-        result = cv.VideoWriter('output.avi', -1, 20.0, (640,480))
+
         while True:
             success, self.img = self.capture.read()
             if success == True:
@@ -84,8 +95,9 @@ class Line:
                 self.getContour(imgDil, imgContour)
 
                 imgStack = imgContour
-                cv.imshow('Blur', imgStack)
-                # cv.imshow('Canny', imgCanny)
+                cv.imshow('Image', imgStack)
+                
+                self.writer.write(imgStack)
 
                 if cv.waitKey(1) & 0xFF == ord('q'):
                     break
@@ -93,7 +105,7 @@ class Line:
                 break
 
         self.capture.release()
-        result.release()
+        self.writer.release()
         cv.destroyAllWindows()
 
     def getImage(self):
